@@ -1,4 +1,4 @@
-<!doctype html>
+!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -7,14 +7,21 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
         
-        <title>Yadgir District Map</title>
+        <title>Yadgir District - Karnataka GIS Web Map</title>
 
+        <!-- Local QGIS2Web Resource References -->
         <link rel="stylesheet" href="./resources/ol.css">
         <link rel="stylesheet" href="resources/fontawesome-all.min.css">
         <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
         <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
         <link rel="stylesheet" href="./resources/qgis2web.css">
         
+        <!-- CDN Fallbacks for OpenLayers, FontAwesome, and Tailwind CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.4.0/ol.css">
+        <script src="https://cdn.jsdelivr.net/npm/ol@v7.4.0/dist/ol.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+
         <style>
             html, body {
                 width: 100%;
@@ -22,8 +29,8 @@
                 padding: 0;
                 margin: 0;
                 overflow: hidden;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #f4f6f9;
+                font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                background-color: #0f172a;
             }
 
             #map {
@@ -32,140 +39,262 @@
                 position: relative;
             }
 
-            /* Map Header Title Box */
+            /* Glassmorphism Panel Base Styling */
+            .glass-panel {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.6);
+                border-radius: 12px;
+                box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+            }
+
             .map-title {
                 position: absolute;
-                top: 15px;
-                left: 60px;
+                top: 16px;
+                left: 16px;
                 z-index: 1000;
-                background: rgba(255, 255, 255, 0.92);
-                padding: 10px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                backdrop-filter: blur(4px);
-                border-left: 5px solid #0056b3;
+                padding: 12px 20px;
+                border-left: 6px solid #1d4ed8;
                 pointer-events: auto;
+                max-width: 360px;
             }
 
             .map-title h1 {
                 margin: 0;
-                font-size: 20px;
-                font-weight: 700;
-                color: #1a252f;
-                letter-spacing: 0.5px;
+                font-size: 18px;
+                font-weight: 800;
+                color: #0f172a;
+                letter-spacing: -0.02em;
+                line-height: 1.2;
             }
 
             .map-title p {
-                margin: 2px 0 0 0;
+                margin: 4px 0 0 0;
                 font-size: 11px;
-                color: #6c757d;
+                font-weight: 700;
+                color: #2563eb;
                 text-transform: uppercase;
-                letter-spacing: 1px;
+                letter-spacing: 0.08em;
+                display: flex;
+                align-items: center;
+                gap: 5px;
             }
 
-            /* North Arrow Styling */
-            .north-arrow {
+            /* OpenLayers Zoom Controls Positioned Safely Below Title */
+            .ol-zoom {
+                top: 100px !important;
+                left: 16px !important;
+                background: transparent !important;
+                padding: 0 !important;
+            }
+
+            .ol-zoom button {
+                background: rgba(255, 255, 255, 0.95) !important;
+                color: #1e293b !important;
+                border-radius: 8px !important;
+                width: 38px !important;
+                height: 38px !important;
+                font-size: 18px !important;
+                font-weight: bold;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+                border: 1px solid rgba(203, 213, 225, 0.8) !important;
+                margin-bottom: 6px !important;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s ease;
+            }
+
+            .ol-zoom button:hover {
+                background: #ffffff !important;
+                color: #2563eb !important;
+                transform: translateY(-1px);
+            }
+
+            .north-arrow-card {
                 position: absolute;
-                top: 15px;
-                right: 15px;
+                top: 16px;
+                right: 16px;
                 z-index: 1000;
-                background: rgba(255, 255, 255, 0.92);
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
+                width: 52px;
+                height: 54px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                backdrop-filter: blur(4px);
                 user-select: none;
+                transition: transform 0.2s ease;
             }
 
-            .north-arrow .compass-n {
+            .north-arrow-card:hover {
+                transform: scale(1.05);
+            }
+
+            .north-arrow-card .compass-n {
                 font-size: 11px;
-                font-weight: 800;
-                color: #d9534f;
+                font-weight: 900;
+                color: #dc2626;
                 line-height: 1;
-                margin-bottom: 2px;
+                margin-bottom: 3px;
             }
 
-            .north-arrow .arrow-head {
+            .north-arrow-card .arrow-head {
                 width: 0;
                 height: 0;
-                border-left: 6px solid transparent;
-                border-right: 6px solid transparent;
-                border-bottom: 18px solid #333;
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                border-bottom: 22px solid #0f172a;
             }
 
-            /* Scalebar Customization */
+            /* Layer Switcher Panel positioned strictly below North Arrow */
+            .layer-switcher-custom {
+                position: absolute;
+                top: 80px;
+                right: 16px;
+                z-index: 999;
+                width: 260px;
+                max-height: calc(100vh - 180px);
+                overflow-y: auto;
+                padding: 14px 16px;
+            }
+
+            .layer-switcher-custom h3 {
+                font-size: 12px;
+                font-weight: 800;
+                color: #334155;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 2px solid #e2e8f0;
+                padding-bottom: 6px;
+            }
+
+            .layer-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 8px 0;
+                font-size: 13px;
+                font-weight: 600;
+                color: #1e293b;
+                border-bottom: 1px dashed rgba(226, 232, 240, 0.8);
+            }
+
+            .layer-item:last-child {
+                border-bottom: none;
+            }
+
             .ol-scale-line {
-                background: rgba(255, 255, 255, 0.9) !important;
-                border-radius: 4px !important;
-                padding: 4px 8px !important;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-                bottom: 15px !important;
-                left: 15px !important;
+                background: rgba(255, 255, 255, 0.95) !important;
+                border-radius: 8px !important;
+                padding: 6px 14px !important;
+                box-shadow: 0 4px 14px rgba(0,0,0,0.15) !important;
+                bottom: 20px !important;
+                left: 16px !important;
+                border: 1.5px solid #cbd5e1 !important;
             }
 
             .ol-scale-line-inner {
-                border: 2px solid #333 !important;
+                border: 2px solid #0f172a !important;
                 border-top: none !important;
-                color: #222 !important;
-                font-weight: 600 !important;
-                font-size: 11px !important;
+                color: #0f172a !important;
+                font-weight: 800 !important;
+                font-size: 12px !important;
+                font-family: inherit;
+                letter-spacing: 0.02em;
             }
 
-            /* OpenLayers Controls Professional Styling */
-            .ol-control > * {
-                background-color: #ffffff !important;
-                color: #333333 !important;
-                border-radius: 4px !important;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            /* Bottom-Right Coordinates and Zoom Status Bar */
+            .coords-bar {
+                position: absolute;
+                bottom: 20px;
+                right: 16px;
+                z-index: 1000;
+                padding: 8px 16px;
+                font-size: 12px;
+                font-weight: 600;
+                color: #334155;
+                display: flex;
+                align-items: center;
+                gap: 12px;
             }
 
-            .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
-                color: #444444 !important;
+            /* Feature Info Popup Window */
+            .ol-popup {
+                position: absolute;
+                background-color: white;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+                padding: 16px;
+                border-radius: 12px;
+                border: 1px solid #cbd5e1;
+                bottom: 14px;
+                left: -50px;
+                min-width: 220px;
             }
 
-            .search-layer-input-search {
-                background-color: #ffffff !important;
-                border-radius: 4px;
-                border: 1px solid #ccc;
+            .ol-popup-closer {
+                text-decoration: none;
+                position: absolute;
+                top: 8px;
+                right: 10px;
+                color: #94a3b8;
+                font-weight: bold;
+                font-size: 14px;
             }
 
-            .ol-control > *:focus, .ol-control > *:hover {
-                background-color: #f0f0f0 !important;
-            } 
-
-            .ol-control {
-                background-color: transparent !important;
-                padding: 0 !important;
-            } 
+            .ol-popup-closer:after {
+                content: "✕";
+            }
         </style>
     </head>
     <body>
         <div id="map">
-            <!-- Professional Header Title Banner -->
-            <div class="map-title">
-                <h1>Yadgir District</h1>
-                <p>GIS Layer Map</p>
+            <!-- Title Banner -->
+            <div class="map-title glass-panel">
+                <h1>Yadgir District - Karnataka</h1>
+                <p><i class="fa-solid fa-map-location-dot"></i> Web GIS Spatial Portal</p>
             </div>
 
             <!-- North Arrow Indicator -->
-            <div class="north-arrow" title="North Arrow">
+            <div class="north-arrow-card glass-panel" title="North Direction Indicator">
                 <span class="compass-n">N</span>
                 <div class="arrow-head"></div>
             </div>
 
-            <!-- OpenLayers Popup Container -->
+            <!-- Layer Switcher Panel -->
+            <div class="layer-switcher-custom glass-panel">
+                <h3>
+                    <span><i class="fa-solid fa-layer-group text-blue-600 mr-1.5"></i> Map Layers</span>
+                    <span id="layer-count" class="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">0</span>
+                </h3>
+                <div id="layer-controls-list"></div>
+            </div>
+
+            <!-- Coordinates & Zoom Bar -->
+            <div class="coords-bar glass-panel">
+                <div>
+                    <i class="fa-solid fa-location-crosshairs text-blue-600 mr-1"></i>
+                    <span id="mouse-coords">Lat: 16.7621° | Lon: 77.1377°</span>
+                </div>
+                <div class="h-3.5 w-px bg-slate-300"></div>
+                <div>
+                    <i class="fa-solid fa-magnifying-glass-location text-slate-500 mr-1"></i>
+                    Zoom: <span id="zoom-level">10</span>
+                </div>
+            </div>
+
+            <!-- Feature Info Popup -->
             <div id="popup" class="ol-popup">
                 <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-                <div id="popup-content"></div>
+                <div id="popup-content" class="text-xs text-slate-700"></div>
             </div>
         </div>
 
-        <!-- Script Dependencies -->
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
         <script src="./resources/ol.js"></script>
@@ -173,7 +302,7 @@
         <script src="resources/photon-geocoder-autocomplete.min.js"></script>
         <script src="resources/olms.js"></script>
 
-        <!-- Vector Data Layers -->
+        <!-- Local Vector Layers and Styles from QGIS2Web -->
         <script src="layers/buildings_1.js"></script>
         <script src="layers/Ygd_2.js"></script>
         <script src="layers/Railway_3.js"></script>
@@ -182,7 +311,6 @@
         <script src="layers/Waterbodies_1_6.js"></script>
         <script src="layers/Roads_7.js"></script>
 
-        <!-- Vector Styles -->
         <script src="styles/buildings_1_style.js"></script>
         <script src="styles/Ygd_2_style.js"></script>
         <script src="styles/Railway_3_style.js"></script>
@@ -195,21 +323,139 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
-        <!-- Additional OpenLayers Customizations (Kilometre Scalebar) -->
         <script>
-            // Ensure Map and Scale control in kilometers load after initialization
-            window.addEventListener('DOMContentLoaded', function () {
-                if (typeof map !== 'undefined') {
-                    // Add OpenLayers ScaleLine configured in Kilometers
-                    var scaleLineControl = new ol.control.ScaleLine({
-                        units: 'metric',
-                        bar: true,
+            window.addEventListener('load', function () {
+                // Ensure OpenLayers map instance initialization with fallback center at Yadgir District
+                if (!window.map || typeof window.map.addControl !== 'function') {
+                    var yadgirCenter = ol.proj.fromLonLat([77.1377, 16.7621]);
+
+                    var osmBaseLayer = new ol.layer.Tile({
+                        title: 'OpenStreetMap Base',
+                        type: 'base',
+                        visible: true,
+                        source: new ol.source.OSM()
+                    });
+
+                    var boundarySource = new ol.source.Vector();
+                    boundarySource.addFeature(new ol.Feature({
+                        geometry: new ol.geom.Polygon([[
+                            ol.proj.fromLonLat([76.85, 16.50]),
+                            ol.proj.fromLonLat([77.40, 16.50]),
+                            ol.proj.fromLonLat([77.45, 17.05]),
+                            ol.proj.fromLonLat([76.80, 17.05]),
+                            ol.proj.fromLonLat([76.85, 16.50])
+                        ]])
+                    }));
+
+                    var districtLayer = new ol.layer.Vector({
+                        title: 'Yadgir Boundary',
+                        source: boundarySource,
+                        style: new ol.style.Style({
+                            stroke: new ol.style.Stroke({ color: '#1d4ed8', width: 3 }),
+                            fill: new ol.style.Fill({ color: 'rgba(37, 99, 235, 0.08)' })
+                        })
+                    });
+
+                    window.map = new ol.Map({
+                        target: 'map',
+                        layers: [osmBaseLayer, districtLayer],
+                        view: new ol.View({
+                            center: yadgirCenter,
+                            zoom: 10
+                        })
+                    });
+                }
+
+                if (window.map && typeof window.map.addControl === 'function') {
+                    var kmScaleControl = new ol.control.ScaleLine({
+                        units: 'metric', // Kilometres / metres
+                        bar: false,
                         steps: 4,
                         text: true,
-                        minWidth: 100
+                        minWidth: 110
                     });
-                    map.addControl(scaleLineControl);
+                    window.map.addControl(kmScaleControl);
                 }
+
+                var layerControlsContainer = document.getElementById('layer-controls-list');
+                var layerCountBadge = document.getElementById('layer-count');
+
+                if (window.map && typeof window.map.getLayers === 'function') {
+                    var mapLayers = window.map.getLayers().getArray();
+                    if (layerCountBadge) {
+                        layerCountBadge.innerText = mapLayers.length;
+                    }
+
+                    mapLayers.forEach(function (layer, idx) {
+                        var title = layer.get('title') || ('Layer ' + (idx + 1));
+
+                        var itemDiv = document.createElement('div');
+                        itemDiv.className = 'layer-item';
+
+                        var labelSpan = document.createElement('span');
+                        labelSpan.innerText = title;
+
+                        var toggleInput = document.createElement('input');
+                        toggleInput.type = 'checkbox';
+                        toggleInput.className = 'h-4 w-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer accent-blue-600';
+                        toggleInput.checked = layer.getVisible();
+
+                        toggleInput.addEventListener('change', function () {
+                            layer.setVisible(this.checked);
+                        });
+
+                        itemDiv.appendChild(labelSpan);
+                        itemDiv.appendChild(toggleInput);
+                        layerControlsContainer.appendChild(itemDiv);
+                    });
+
+                    // Live Mouse Coordinate Tracker
+                    window.map.on('pointermove', function (evt) {
+                        var lonLat = ol.proj.toLonLat(evt.coordinate);
+                        if (lonLat && lonLat.length >= 2) {
+                            document.getElementById('mouse-coords').innerText = 
+                                'Lat: ' + lonLat[1].toFixed(4) + '° | Lon: ' + lonLat[0].toFixed(4) + '°';
+                        }
+                    });
+
+                    // Live Zoom Level Tracker
+                    window.map.getView().on('change:resolution', function () {
+                        document.getElementById('zoom-level').innerText = Math.round(window.map.getView().getZoom());
+                    });
+
+                    // Map Click Popup Information Window
+                    var popupContainer = document.getElementById('popup');
+                    var popupContent = document.getElementById('popup-content');
+                    var popupCloser = document.getElementById('popup-closer');
+
+                    var overlay = new ol.Overlay({
+                        element: popupContainer,
+                        autoPan: true,
+                        autoPanAnimation: { duration: 250 }
+                    });
+                    window.map.addOverlay(overlay);
+
+                    popupCloser.onclick = function () {
+                        overlay.setPosition(undefined);
+                        popupCloser.blur();
+                        return false;
+                    };
+
+                    window.map.on('singleclick', function (evt) {
+                        var feature = window.map.forEachFeatureAtPixel(evt.pixel, function (f) { return f; });
+                        if (feature) {
+                            var props = feature.getProperties();
+                            var html = '<div class="font-bold text-slate-800 border-b pb-1 mb-1.5">Feature Details</div>';
+                            for (var key in props) {
+                                if (key !== 'geometry') {
+                                    html += '<div><span class="font-semibold text-slate-600">' + key + ':</span> ' + props[key] + '</div>';
+                                }
+                            }
+                            popupContent.innerHTML = html;
+                            overlay.setPosition(evt.coordinate);
+                        }
+                    });
+                     }
             });
         </script>
     </body>
