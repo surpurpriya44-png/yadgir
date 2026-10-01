@@ -1,4 +1,4 @@
-!doctype html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -7,16 +7,16 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
         
-        <title>Yadgir District - Karnataka GIS Web Map</title>
+        <title>Yadgir District - Karnataka | Enterprise Web GIS Portal</title>
 
-        <!-- Local QGIS2Web Resource References -->
+        <!-- Local QGIS2Web CSS References -->
         <link rel="stylesheet" href="./resources/ol.css">
         <link rel="stylesheet" href="resources/fontawesome-all.min.css">
         <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
         <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
         <link rel="stylesheet" href="./resources/qgis2web.css">
         
-        <!-- CDN Fallbacks for OpenLayers, FontAwesome, and Tailwind CSS -->
+        <!-- Modern GIS Web App CDNs -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.4.0/ol.css">
         <script src="https://cdn.jsdelivr.net/npm/ol@v7.4.0/dist/ol.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -39,66 +39,117 @@
                 position: relative;
             }
 
-            /* Glassmorphism Panel Base Styling */
-            .glass-panel {
-                background: rgba(255, 255, 255, 0.95);
+            /* Hide raw unstyled qgis2web default overlays */
+            .ol-layerswitcher, .layer-switcher {
+                display: none !important;
+            }
+
+            /* Enterprise UI Panel Base Styling */
+            .gis-glass-panel {
+                background: rgba(15, 23, 42, 0.88);
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.6);
-                border-radius: 12px;
-                box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+                color: #f8fafc;
             }
 
-            .map-title {
+            /* Header Bar */
+            .top-header {
                 position: absolute;
-                top: 16px;
-                left: 16px;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 56px;
                 z-index: 1000;
-                padding: 12px 20px;
-                border-left: 6px solid #1d4ed8;
-                pointer-events: auto;
-                max-width: 360px;
-            }
-
-            .map-title h1 {
-                margin: 0;
-                font-size: 18px;
-                font-weight: 800;
-                color: #0f172a;
-                letter-spacing: -0.02em;
-                line-height: 1.2;
-            }
-
-            .map-title p {
-                margin: 4px 0 0 0;
-                font-size: 11px;
-                font-weight: 700;
-                color: #2563eb;
-                text-transform: uppercase;
-                letter-spacing: 0.08em;
                 display: flex;
                 align-items: center;
-                gap: 5px;
+                justify-content: space-between;
+                padding: 0 16px;
+                background: #0f172a;
+                border-bottom: 1px solid #1e293b;
             }
 
-            /* OpenLayers Zoom Controls Positioned Safely Below Title */
+            /* Left Toolbar Container */
+            .left-toolbar {
+                position: absolute;
+                top: 70px;
+                left: 16px;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .gis-btn-icon {
+                width: 44px;
+                height: 44px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-size: 18px;
+            }
+
+            .gis-btn-icon:hover {
+                transform: translateX(2px);
+            }
+
+            /* Left Drawer Sidebar for Layers */
+            .left-sidebar-drawer {
+                position: absolute;
+                top: 70px;
+                left: 70px;
+                z-index: 999;
+                width: 320px;
+                max-height: calc(100vh - 120px);
+                border-radius: 14px;
+                display: flex;
+                flex-direction: column;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            .left-sidebar-drawer.closed {
+                opacity: 0;
+                transform: translateX(-20px);
+                pointer-events: none;
+            }
+
+            .layer-scroll-container {
+                overflow-y: auto;
+                max-height: calc(100vh - 200px);
+            }
+
+            .layer-scroll-container::-webkit-scrollbar {
+                width: 6px;
+            }
+            .layer-scroll-container::-webkit-scrollbar-thumb {
+                background: #334155;
+                border-radius: 4px;
+            }
+
+            /* Customized OpenLayers Controls */
             .ol-zoom {
-                top: 100px !important;
+                top: auto !important;
+                bottom: 80px !important;
                 left: 16px !important;
                 background: transparent !important;
                 padding: 0 !important;
             }
 
             .ol-zoom button {
-                background: rgba(255, 255, 255, 0.95) !important;
-                color: #1e293b !important;
+                background: rgba(15, 23, 42, 0.9) !important;
+                color: #f8fafc !important;
                 border-radius: 8px !important;
-                width: 38px !important;
-                height: 38px !important;
+                width: 40px !important;
+                height: 40px !important;
                 font-size: 18px !important;
                 font-weight: bold;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-                border: 1px solid rgba(203, 213, 225, 0.8) !important;
+                border: 1px solid rgba(255,255,255,0.15) !important;
                 margin-bottom: 6px !important;
                 cursor: pointer;
                 display: flex;
@@ -108,108 +159,62 @@
             }
 
             .ol-zoom button:hover {
-                background: #ffffff !important;
-                color: #2563eb !important;
-                transform: translateY(-1px);
+                background: #2563eb !important;
+                color: #ffffff !important;
             }
 
+            /* North Arrow Indicator */
             .north-arrow-card {
                 position: absolute;
-                top: 16px;
+                top: 70px;
                 right: 16px;
                 z-index: 1000;
-                width: 52px;
-                height: 54px;
+                width: 48px;
+                height: 50px;
+                border-radius: 12px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 user-select: none;
-                transition: transform 0.2s ease;
-            }
-
-            .north-arrow-card:hover {
-                transform: scale(1.05);
             }
 
             .north-arrow-card .compass-n {
                 font-size: 11px;
                 font-weight: 900;
-                color: #dc2626;
+                color: #ef4444;
                 line-height: 1;
-                margin-bottom: 3px;
+                margin-bottom: 2px;
             }
 
             .north-arrow-card .arrow-head {
                 width: 0;
                 height: 0;
-                border-left: 7px solid transparent;
-                border-right: 7px solid transparent;
-                border-bottom: 22px solid #0f172a;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                border-bottom: 20px solid #38bdf8;
             }
 
-            /* Layer Switcher Panel positioned strictly below North Arrow */
-            .layer-switcher-custom {
-                position: absolute;
-                top: 80px;
-                right: 16px;
-                z-index: 999;
-                width: 260px;
-                max-height: calc(100vh - 180px);
-                overflow-y: auto;
-                padding: 14px 16px;
-            }
-
-            .layer-switcher-custom h3 {
-                font-size: 12px;
-                font-weight: 800;
-                color: #334155;
-                margin-bottom: 10px;
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                border-bottom: 2px solid #e2e8f0;
-                padding-bottom: 6px;
-            }
-
-            .layer-item {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 8px 0;
-                font-size: 13px;
-                font-weight: 600;
-                color: #1e293b;
-                border-bottom: 1px dashed rgba(226, 232, 240, 0.8);
-            }
-
-            .layer-item:last-child {
-                border-bottom: none;
-            }
-
+            /* Scale line styling */
             .ol-scale-line {
-                background: rgba(255, 255, 255, 0.95) !important;
+                background: rgba(15, 23, 42, 0.9) !important;
                 border-radius: 8px !important;
                 padding: 6px 14px !important;
-                box-shadow: 0 4px 14px rgba(0,0,0,0.15) !important;
                 bottom: 20px !important;
                 left: 16px !important;
-                border: 1.5px solid #cbd5e1 !important;
+                border: 1px solid rgba(255,255,255,0.2) !important;
             }
 
             .ol-scale-line-inner {
-                border: 2px solid #0f172a !important;
+                border: 2px solid #38bdf8 !important;
                 border-top: none !important;
-                color: #0f172a !important;
-                font-weight: 800 !important;
-                font-size: 12px !important;
-                font-family: inherit;
-                letter-spacing: 0.02em;
+                color: #f8fafc !important;
+                font-weight: 700 !important;
+                font-size: 11px !important;
+                letter-spacing: 0.05em;
             }
 
-            /* Bottom-Right Coordinates and Zoom Status Bar */
+            /* Coordinates status bar bottom right */
             .coords-bar {
                 position: absolute;
                 bottom: 20px;
@@ -218,33 +223,36 @@
                 padding: 8px 16px;
                 font-size: 12px;
                 font-weight: 600;
-                color: #334155;
-                display: flex;
-                align-items: center;
-                gap: 12px;
+                color: #94a3b8;
+                border-radius: 10px;
             }
 
-            /* Feature Info Popup Window */
+            /* Interactive Info Popup */
             .ol-popup {
                 position: absolute;
-                background-color: white;
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+                background-color: #0f172a;
+                color: #f8fafc;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
                 padding: 16px;
                 border-radius: 12px;
-                border: 1px solid #cbd5e1;
+                border: 1px solid #334155;
                 bottom: 14px;
                 left: -50px;
-                min-width: 220px;
+                min-width: 240px;
             }
 
             .ol-popup-closer {
                 text-decoration: none;
                 position: absolute;
-                top: 8px;
-                right: 10px;
-                color: #94a3b8;
+                top: 10px;
+                right: 12px;
+                color: #64748b;
                 font-weight: bold;
                 font-size: 14px;
+            }
+
+            .ol-popup-closer:hover {
+                color: #f8fafc;
             }
 
             .ol-popup-closer:after {
@@ -253,48 +261,77 @@
         </style>
     </head>
     <body>
+        <!-- Top Application Header -->
+        <header class="top-header">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white p-2 rounded-lg text-sm font-bold">
+                    <i class="fa-solid fa-earth-asia"></i>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-slate-100 tracking-wide leading-tight">Yadgir District - Karnataka</h1>
+                    <p class="text-xs text-blue-400 font-medium">Enterprise Web GIS Spatial Portal</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> GIS Live System
+                </span>
+            </div>
+        </header>
+
         <div id="map">
-            <!-- Title Banner -->
-            <div class="map-title glass-panel">
-                <h1>Yadgir District - Karnataka</h1>
-                <p><i class="fa-solid fa-map-location-dot"></i> Web GIS Spatial Portal</p>
+            <!-- Left Action Toolbar Buttons -->
+            <div class="left-toolbar">
+                <button id="toggle-layer-btn" title="Toggle Layers Panel" class="gis-btn-icon bg-blue-600 text-white shadow-lg hover:bg-blue-500">
+                    <i class="fa-solid fa-layer-group"></i>
+                </button>
+            </div>
+
+            <!-- Left Collapsible Sidebar Panel for Layers -->
+            <div id="layer-sidebar" class="left-sidebar-drawer gis-glass-panel p-4">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-700/80">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-blue-400"></i>
+                        <h2 class="text-sm font-bold text-slate-100 uppercase tracking-wider">Map Layer Management</h2>
+                    </div>
+                    <button id="close-layer-btn" class="text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Layer List Container -->
+                <div id="layer-controls-list" class="layer-scroll-container space-y-2.5 pr-1">
+                    <!-- Dynamic Layer Items Injected Here -->
+                </div>
             </div>
 
             <!-- North Arrow Indicator -->
-            <div class="north-arrow-card glass-panel" title="North Direction Indicator">
+            <div class="north-arrow-card gis-glass-panel" title="North Arrow Indicator">
                 <span class="compass-n">N</span>
                 <div class="arrow-head"></div>
             </div>
 
-            <!-- Layer Switcher Panel -->
-            <div class="layer-switcher-custom glass-panel">
-                <h3>
-                    <span><i class="fa-solid fa-layer-group text-blue-600 mr-1.5"></i> Map Layers</span>
-                    <span id="layer-count" class="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">0</span>
-                </h3>
-                <div id="layer-controls-list"></div>
-            </div>
-
-            <!-- Coordinates & Zoom Bar -->
-            <div class="coords-bar glass-panel">
-                <div>
-                    <i class="fa-solid fa-location-crosshairs text-blue-600 mr-1"></i>
+            <!-- Bottom Right Coordinates Display -->
+            <div class="coords-bar gis-glass-panel flex items-center gap-3">
+                <div class="flex items-center gap-1.5 text-slate-200">
+                    <i class="fa-solid fa-crosshairs text-blue-400"></i>
                     <span id="mouse-coords">Lat: 16.7621° | Lon: 77.1377°</span>
                 </div>
-                <div class="h-3.5 w-px bg-slate-300"></div>
-                <div>
-                    <i class="fa-solid fa-magnifying-glass-location text-slate-500 mr-1"></i>
-                    Zoom: <span id="zoom-level">10</span>
+                <div class="h-3 w-px bg-slate-700"></div>
+                <div class="text-slate-300">
+                    Zoom: <span id="zoom-level" class="text-blue-400 font-bold">10</span>
                 </div>
             </div>
 
-            <!-- Feature Info Popup -->
+            <!-- Info Feature Popup Overlay -->
             <div id="popup" class="ol-popup">
                 <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-                <div id="popup-content" class="text-xs text-slate-700"></div>
+                <div id="popup-content" class="text-xs text-slate-200"></div>
             </div>
         </div>
 
+        <!-- Local QGIS2Web Resources -->
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
         <script src="./resources/ol.js"></script>
@@ -302,7 +339,7 @@
         <script src="resources/photon-geocoder-autocomplete.min.js"></script>
         <script src="resources/olms.js"></script>
 
-        <!-- Local Vector Layers and Styles from QGIS2Web -->
+        <!-- Local Layer Vector Data & Styling Files -->
         <script src="layers/buildings_1.js"></script>
         <script src="layers/Ygd_2.js"></script>
         <script src="layers/Railway_3.js"></script>
@@ -324,41 +361,76 @@
         <script src="./resources/qgis2web.js"></script>
 
         <script>
+            // Utility function to extract clean, professional titles without raw <img> tags
+            function formatCleanTitle(rawTitle, index) {
+                if (!rawTitle) return { name: 'Vector Layer ' + (index + 1), color: '#3b82f6' };
+
+                // Strip out all HTML tags like <img src="..." />
+                var clean = rawTitle.replace(/<[^>]*>/g, '').trim();
+
+                var titleLower = clean.toLowerCase();
+                var color = '#94a3b8'; // default slate color
+
+                if (titleLower.includes('ygd') || titleLower.includes('boundary')) {
+                    clean = 'Yadgir Boundary';
+                    color = '#3b82f6'; // Blue
+                } else if (titleLower.includes('building')) {
+                    clean = 'Buildings';
+                    color = '#f97316'; // Orange
+                } else if (titleLower.includes('railway')) {
+                    clean = 'Railway Network';
+                    color = '#ef4444'; // Red
+                } else if (titleLower.includes('landuse')) {
+                    clean = 'Land Use / Land Cover';
+                    color = '#84cc16'; // Lime Green
+                } else if (titleLower.includes('watebodies') || titleLower.includes('water')) {
+                    clean = 'Water Bodies';
+                    color = '#06b6d4'; // Cyan
+                } else if (titleLower.includes('road')) {
+                    clean = 'Road Network';
+                    color = '#eab308'; // Yellow
+                } else if (titleLower.includes('osm') || titleLower.includes('standard')) {
+                    clean = 'OSM Base Map';
+                    color = '#64748b'; // Gray
+                }
+
+                if (!clean) clean = 'Layer ' + (index + 1);
+
+                return { name: clean, color: color };
+            }
+
             window.addEventListener('load', function () {
-                // Ensure OpenLayers map instance initialization with fallback center at Yadgir District
+                // Ensure OpenLayers Map instance is active
                 if (!window.map || typeof window.map.addControl !== 'function') {
                     var yadgirCenter = ol.proj.fromLonLat([77.1377, 16.7621]);
 
-                    var osmBaseLayer = new ol.layer.Tile({
-                        title: 'OpenStreetMap Base',
+                    var osmBase = new ol.layer.Tile({
+                        title: 'OSM Base Map',
                         type: 'base',
                         visible: true,
                         source: new ol.source.OSM()
                     });
 
-                    var boundarySource = new ol.source.Vector();
-                    boundarySource.addFeature(new ol.Feature({
-                        geometry: new ol.geom.Polygon([[
-                            ol.proj.fromLonLat([76.85, 16.50]),
-                            ol.proj.fromLonLat([77.40, 16.50]),
-                            ol.proj.fromLonLat([77.45, 17.05]),
-                            ol.proj.fromLonLat([76.80, 17.05]),
-                            ol.proj.fromLonLat([76.85, 16.50])
-                        ]])
-                    }));
-
-                    var districtLayer = new ol.layer.Vector({
+                    var fallbackBoundary = new ol.layer.Vector({
                         title: 'Yadgir Boundary',
-                        source: boundarySource,
+                        source: new ol.source.Vector({
+                            features: [new ol.Feature(new ol.geom.Polygon([[
+                                ol.proj.fromLonLat([76.85, 16.50]),
+                                ol.proj.fromLonLat([77.40, 16.50]),
+                                ol.proj.fromLonLat([77.45, 17.05]),
+                                ol.proj.fromLonLat([76.80, 17.05]),
+                                ol.proj.fromLonLat([76.85, 16.50])
+                            ]]))]
+                        }),
                         style: new ol.style.Style({
-                            stroke: new ol.style.Stroke({ color: '#1d4ed8', width: 3 }),
+                            stroke: new ol.style.Stroke({ color: '#2563eb', width: 3 }),
                             fill: new ol.style.Fill({ color: 'rgba(37, 99, 235, 0.08)' })
                         })
                     });
 
                     window.map = new ol.Map({
                         target: 'map',
-                        layers: [osmBaseLayer, districtLayer],
+                        layers: [osmBase, fallbackBoundary],
                         view: new ol.View({
                             center: yadgirCenter,
                             zoom: 10
@@ -366,96 +438,157 @@
                     });
                 }
 
+                // Add Kilometre Metric Scale Bar
                 if (window.map && typeof window.map.addControl === 'function') {
-                    var kmScaleControl = new ol.control.ScaleLine({
-                        units: 'metric', // Kilometres / metres
+                    var kmScale = new ol.control.ScaleLine({
+                        units: 'metric',
                         bar: false,
                         steps: 4,
                         text: true,
-                        minWidth: 110
+                        minWidth: 100
                     });
-                    window.map.addControl(kmScaleControl);
+                    window.map.addControl(kmScale);
                 }
 
-                var layerControlsContainer = document.getElementById('layer-controls-list');
-                var layerCountBadge = document.getElementById('layer-count');
+                // Left Sidebar Toggle Functionality
+                var sidebar = document.getElementById('layer-sidebar');
+                var toggleBtn = document.getElementById('toggle-layer-btn');
+                var closeBtn = document.getElementById('close-layer-btn');
 
-                if (window.map && typeof window.map.getLayers === 'function') {
-                    var mapLayers = window.map.getLayers().getArray();
-                    if (layerCountBadge) {
-                        layerCountBadge.innerText = mapLayers.length;
-                    }
+                toggleBtn.addEventListener('click', function () {
+                    sidebar.classList.toggle('closed');
+                });
 
-                    mapLayers.forEach(function (layer, idx) {
-                        var title = layer.get('title') || ('Layer ' + (idx + 1));
+                closeBtn.addEventListener('click', function () {
+                    sidebar.classList.add('closed');
+                });
 
-                        var itemDiv = document.createElement('div');
-                        itemDiv.className = 'layer-item';
+                // Populate Layer Switcher with clean UI controls
+                var container = document.getElementById('layer-controls-list');
 
-                        var labelSpan = document.createElement('span');
-                        labelSpan.innerText = title;
+                function renderLayerControls() {
+                    if (!window.map || typeof window.map.getLayers !== 'function') return;
 
-                        var toggleInput = document.createElement('input');
-                        toggleInput.type = 'checkbox';
-                        toggleInput.className = 'h-4 w-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer accent-blue-600';
-                        toggleInput.checked = layer.getVisible();
+                    container.innerHTML = '';
+                    var layers = window.map.getLayers().getArray();
 
-                        toggleInput.addEventListener('change', function () {
+                    layers.forEach(function (layer, idx) {
+                        var rawTitle = layer.get('title') || '';
+                        var info = formatCleanTitle(rawTitle, idx);
+
+                        var card = document.createElement('div');
+                        card.className = 'bg-slate-800/80 border border-slate-700/80 rounded-lg p-3 transition-all hover:border-slate-600';
+
+                        // Card Header: Color Indicator + Layer Title + Checkbox
+                        var topRow = document.createElement('div');
+                        topRow.className = 'flex items-center justify-between gap-2';
+
+                        var titleBox = document.createElement('div');
+                        titleBox.className = 'flex items-center gap-2 overflow-hidden';
+
+                        var colorDot = document.createElement('span');
+                        colorDot.className = 'w-3 h-3 rounded-full flex-shrink-0';
+                        colorDot.style.backgroundColor = info.color;
+
+                        var titleText = document.createElement('span');
+                        titleText.className = 'text-xs font-semibold text-slate-200 truncate';
+                        titleText.innerText = info.name;
+
+                        titleBox.appendChild(colorDot);
+                        titleBox.appendChild(titleText);
+
+                        var toggle = document.createElement('input');
+                        toggle.type = 'checkbox';
+                        toggle.className = 'w-4 h-4 rounded text-blue-600 bg-slate-900 border-slate-600 focus:ring-blue-500 accent-blue-600 cursor-pointer';
+                        toggle.checked = layer.getVisible();
+
+                        toggle.addEventListener('change', function () {
                             layer.setVisible(this.checked);
                         });
 
-                        itemDiv.appendChild(labelSpan);
-                        itemDiv.appendChild(toggleInput);
-                        layerControlsContainer.appendChild(itemDiv);
+                        topRow.appendChild(titleBox);
+                        topRow.appendChild(toggle);
+
+                        // Opacity Control Slider
+                        var opacityRow = document.createElement('div');
+                        opacityRow.className = 'mt-2.5 flex items-center gap-2 pt-2 border-t border-slate-700/50';
+
+                        var opacityLabel = document.createElement('span');
+                        opacityLabel.className = 'text-[10px] text-slate-400 font-medium uppercase';
+                        opacityLabel.innerText = 'Opacity';
+
+                        var opacityInput = document.createElement('input');
+                        opacityInput.type = 'range';
+                        opacityInput.min = '0';
+                        opacityInput.max = '1';
+                        opacityInput.step = '0.05';
+                        opacityInput.value = layer.getOpacity() !== undefined ? layer.getOpacity() : 1;
+                        opacityInput.className = 'w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500';
+
+                        opacityInput.addEventListener('input', function () {
+                            layer.setOpacity(parseFloat(this.value));
+                        });
+
+                        opacityRow.appendChild(opacityLabel);
+                        opacityRow.appendChild(opacityInput);
+
+                        card.appendChild(topRow);
+                        card.appendChild(opacityRow);
+                        container.appendChild(card);
                     });
+                }
 
-                    // Live Mouse Coordinate Tracker
-                    window.map.on('pointermove', function (evt) {
-                        var lonLat = ol.proj.toLonLat(evt.coordinate);
-                        if (lonLat && lonLat.length >= 2) {
-                            document.getElementById('mouse-coords').innerText = 
-                                'Lat: ' + lonLat[1].toFixed(4) + '° | Lon: ' + lonLat[0].toFixed(4) + '°';
-                        }
-                    });
+                // Initial render & delayed refreshes for qgis2web layers loading dynamically
+                renderLayerControls();
+                setTimeout(renderLayerControls, 500);
+                setTimeout(renderLayerControls, 1500);
 
-                    // Live Zoom Level Tracker
-                    window.map.getView().on('change:resolution', function () {
-                        document.getElementById('zoom-level').innerText = Math.round(window.map.getView().getZoom());
-                    });
+                // Mouse Coordinates Tracking
+                window.map.on('pointermove', function (evt) {
+                    var lonLat = ol.proj.toLonLat(evt.coordinate);
+                    if (lonLat && lonLat.length >= 2) {
+                        document.getElementById('mouse-coords').innerText =
+                            'Lat: ' + lonLat[1].toFixed(4) + '° | Lon: ' + lonLat[0].toFixed(4) + '°';
+                    }
+                });
 
-                    // Map Click Popup Information Window
-                    var popupContainer = document.getElementById('popup');
-                    var popupContent = document.getElementById('popup-content');
-                    var popupCloser = document.getElementById('popup-closer');
+                // Zoom Tracker
+                window.map.getView().on('change:resolution', function () {
+                    document.getElementById('zoom-level').innerText = Math.round(window.map.getView().getZoom());
+                });
 
-                    var overlay = new ol.Overlay({
-                        element: popupContainer,
-                        autoPan: true,
-                        autoPanAnimation: { duration: 250 }
-                    });
-                    window.map.addOverlay(overlay);
+                // Feature Click Popup
+                var popupElem = document.getElementById('popup');
+                var popupContent = document.getElementById('popup-content');
+                var popupCloser = document.getElementById('popup-closer');
 
-                    popupCloser.onclick = function () {
-                        overlay.setPosition(undefined);
-                        popupCloser.blur();
-                        return false;
-                    };
+                var popupOverlay = new ol.Overlay({
+                    element: popupElem,
+                    autoPan: true,
+                    autoPanAnimation: { duration: 250 }
+                });
+                window.map.addOverlay(popupOverlay);
 
-                    window.map.on('singleclick', function (evt) {
-                        var feature = window.map.forEachFeatureAtPixel(evt.pixel, function (f) { return f; });
-                        if (feature) {
-                            var props = feature.getProperties();
-                            var html = '<div class="font-bold text-slate-800 border-b pb-1 mb-1.5">Feature Details</div>';
-                            for (var key in props) {
-                                if (key !== 'geometry') {
-                                    html += '<div><span class="font-semibold text-slate-600">' + key + ':</span> ' + props[key] + '</div>';
-                                }
+                popupCloser.onclick = function () {
+                    popupOverlay.setPosition(undefined);
+                    popupCloser.blur();
+                    return false;
+                };
+
+                window.map.on('singleclick', function (evt) {
+                    var feature = window.map.forEachFeatureAtPixel(evt.pixel, function (f) { return f; });
+                    if (feature) {
+                        var props = feature.getProperties();
+                        var html = '<div class="font-bold text-blue-400 border-b border-slate-700 pb-1 mb-2">Feature Information</div>';
+                        for (var k in props) {
+                            if (k !== 'geometry') {
+                                html += '<div class="py-0.5"><span class="font-semibold text-slate-400">' + k + ':</span> ' + props[k] + '</div>';
                             }
-                            popupContent.innerHTML = html;
-                            overlay.setPosition(evt.coordinate);
                         }
-                    });
-                     }
+                        popupContent.innerHTML = html;
+                        popupOverlay.setPosition(evt.coordinate);
+                    }
+                });
             });
         </script>
     </body>
