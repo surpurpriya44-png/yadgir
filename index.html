@@ -41,7 +41,7 @@
                 color: var(--text-dark);
             }
 
-            /* QGIS default conflicting switcher hide karein */
+            /* QGIS default switcher ko hide karein */
             .ol-layerswitcher, .layer-switcher, .layer-switcher.shown {
                 display: none !important;
             }
@@ -53,7 +53,7 @@
                 width: 100vw;
             }
 
-            /* Header Bar */
+            /* 1. Header Bar */
             #header {
                 height: 42px;
                 background: linear-gradient(90deg, var(--brand-dark), var(--brand-blue));
@@ -82,7 +82,7 @@
                 border-radius: 4px;
             }
 
-            /* KPI Summary Ribbon */
+            /* 2. KPI Summary Ribbon */
             #kpi-ribbon {
                 height: 38px;
                 background: #ffffff;
@@ -106,7 +106,7 @@
                 font-weight: 700;
             }
 
-            /* Main Dashboard Stage */
+            /* 3. Main Dashboard Workspace */
             #dashboard-body {
                 flex: 1;
                 display: flex;
@@ -114,7 +114,7 @@
                 position: relative;
             }
 
-            /* Left Sidebar: Filters & Layers */
+            /* Col 1: Filters & Layers */
             #panel-filters {
                 width: 220px;
                 background: #ffffff;
@@ -155,7 +155,7 @@
                 accent-color: var(--brand-blue);
             }
 
-            /* Symbology Indicators */
+            /* Symbology Icons */
             .symbol {
                 width: 12px;
                 height: 12px;
@@ -170,7 +170,7 @@
             .sym-rw { background: #000; height: 3px; border-top: 1px dashed #fff; border-bottom: 1px dashed #fff; }
             .sym-wtr { background: #29b6f6; border: 1px solid #0288d1; }
 
-            /* Middle Explorer Panel */
+            /* Col 2: Explorer Panel */
             #panel-list {
                 width: 240px;
                 background: #ffffff;
@@ -226,7 +226,7 @@
                 margin-top: 2px;
             }
 
-            /* Center Map Canvas */
+            /* Col 3: Center Map Stage */
             #panel-map {
                 flex: 1;
                 position: relative;
@@ -238,7 +238,7 @@
                 height: 100%;
             }
 
-            /* North Arrow */
+            /* North Arrow Control */
             #north-arrow {
                 position: absolute;
                 top: 12px;
@@ -257,7 +257,7 @@
                 display: block;
             }
 
-            /* Right Inspector Panel */
+            /* Col 4: Right Feature Inspector */
             #panel-details {
                 width: 280px;
                 background: #ffffff;
@@ -301,7 +301,7 @@
                 color: var(--text-dark);
             }
 
-            /* Status Bar */
+            /* 4. Bottom Metric Status Bar */
             #status-bar {
                 height: 24px;
                 background: #ffffff;
@@ -352,7 +352,7 @@
                 <div class="app-meta">State: Karnataka | Administrative & Infrastructure Portal</div>
             </header>
 
-            <!-- Metrics Summary -->
+            <!-- Metrics Summary Ribbon -->
             <section id="kpi-ribbon">
                 <div class="kpi-stat">District Area: <span class="val">5,234 km²</span></div>
                 <div class="kpi-stat">Administrative Taluks: <span class="val">6 Units</span></div>
@@ -360,9 +360,9 @@
                 <div class="kpi-stat">Datum / CRS: <span class="val">EPSG:4326 (WGS84)</span></div>
             </section>
 
-            <!-- Main Layout -->
+            <!-- Workspace -->
             <main id="dashboard-body">
-                <!-- Col 1: Base Imagery & Layer Toggles -->
+                <!-- Left: Base Imagery & Vector Layers -->
                 <aside id="panel-filters">
                     <div class="sidebar-section-title">Base Imagery</div>
                     <div class="filter-group">
@@ -415,7 +415,7 @@
                     </div>
                 </aside>
 
-                <!-- Col 2: Taluks / Hubs Explorer -->
+                <!-- Middle: Explorer List -->
                 <aside id="panel-list">
                     <div class="big-metric-box">
                         <div class="number">6</div>
@@ -449,7 +449,7 @@
                     </ul>
                 </aside>
 
-                <!-- Col 3: Map Stage -->
+                <!-- Center: Map Stage -->
                 <section id="panel-map">
                     <div id="map">
                         <div id="popup" class="ol-popup">
@@ -469,7 +469,7 @@
                     </div>
                 </section>
 
-                <!-- Col 4: Right Feature Inspector Panel -->
+                <!-- Right: Details Inspector -->
                 <aside id="panel-details">
                     <div class="details-badge-row">
                         <span class="status-badge badge-active" id="insp-status">Active Layer</span>
@@ -507,7 +507,7 @@
                 </aside>
             </main>
 
-            <!-- Scale & Coordinates Footer -->
+            <!-- Bottom Status Bar -->
             <footer id="status-bar">
                 <div id="scale-container"></div>
                 <div>
@@ -517,7 +517,7 @@
             </footer>
         </div>
 
-        <!-- Scripts -->
+        <!-- JS Scripts -->
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
         <script src="./resources/ol.js"></script>
@@ -547,11 +547,12 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
+        <!-- Custom Fix Script -->
         <script>
-            (function initGISDashboard() {
+            (function initDashboardFix() {
                 if (typeof map === 'undefined') return;
 
-                // 1. Metric Scalebar
+                // 1. Metric Scalebar Control
                 var scaleLine = new ol.control.ScaleLine({
                     units: 'metric',
                     target: document.getElementById('scale-container'),
@@ -560,7 +561,7 @@
                 });
                 map.addControl(scaleLine);
 
-                // 2. Cursor Lat/Lon Tracker
+                // 2. Continuous Lat/Lon Coordinate Tracker
                 map.on('pointermove', function(evt) {
                     var coords = ol.proj.toLonLat(evt.coordinate);
                     var lon = coords[0];
@@ -570,7 +571,15 @@
                     document.getElementById('coord-display').textContent = latStr + ', ' + lonStr;
                 });
 
-                // 3. Basemap Sources (Fix: Ek hi active tile layer mein direct source swap)
+                // 3. BASEMAP FIX: layers.js se pehle se add hui tile layers ko completely remove karein
+                var existingLayers = map.getLayers().getArray().slice();
+                existingLayers.forEach(function(lyr) {
+                    if (!(lyr instanceof ol.layer.Vector)) {
+                        map.removeLayer(lyr);
+                    }
+                });
+
+                // Clean sources define karein
                 var basemapSources = {
                     'osm': new ol.source.OSM(),
                     'groads': new ol.source.XYZ({
@@ -579,20 +588,20 @@
                         maxZoom: 20
                     }),
                     'gsatellite': new ol.source.XYZ({
-                        url: 'https://mt1.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}', // Hybrid Satellite with labels
+                        url: 'https://mt1.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}',
                         crossOrigin: 'anonymous',
                         maxZoom: 20
                     })
                 };
 
-                // Single basemap layer sabse bottom (index 0) par
+                // Single dynamic basemap layer sabse neeche add karein
                 var activeBasemapLayer = new ol.layer.Tile({
                     source: basemapSources['osm'],
                     zIndex: 0
                 });
                 map.getLayers().insertAt(0, activeBasemapLayer);
 
-                // Basemap switch listener
+                // Basemap radio button change listener
                 var radios = document.querySelectorAll('input[name="basemap"]');
                 radios.forEach(function(radio) {
                     radio.addEventListener('change', function() {
@@ -604,7 +613,7 @@
                     });
                 });
 
-                // 4. Thematic Layers Toggle
+                // 4. Hook Thematic Vector Layers
                 function setupToggle(id, layer) {
                     var el = document.getElementById(id);
                     if (el && layer) {
@@ -650,7 +659,7 @@
                 setTimeout(function() { map.updateSize(); }, 200);
             })();
 
-            // Explorer list navigation
+            // Interactive list zoom helper
             function zoomToSpot(lon, lat, name, type, desc) {
                 if (typeof map === 'undefined') return;
                 var view = map.getView();
