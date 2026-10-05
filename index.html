@@ -6,7 +6,7 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <title>Yadgir District Spatial Project Dashboard | Karnataka</title>
+        <title>Yadgir District Spatial Dashboard | Karnataka</title>
 
         <!-- Core Stylesheets -->
         <link rel="stylesheet" href="./resources/ol.css">
@@ -24,7 +24,6 @@
                 --text-dark: #263238;
                 --text-muted: #546e7a;
                 --active-green: #2e7d32;
-                --warn-red: #c62828;
             }
 
             * {
@@ -42,7 +41,7 @@
                 color: var(--text-dark);
             }
 
-            /* Hide default conflicting QGIS widgets */
+            /* QGIS default conflicting switcher hide karein */
             .ol-layerswitcher, .layer-switcher, .layer-switcher.shown {
                 display: none !important;
             }
@@ -54,7 +53,7 @@
                 width: 100vw;
             }
 
-            /* 1. Header Bar */
+            /* Header Bar */
             #header {
                 height: 42px;
                 background: linear-gradient(90deg, var(--brand-dark), var(--brand-blue));
@@ -83,7 +82,7 @@
                 border-radius: 4px;
             }
 
-            /* 2. KPI / Metrics Summary Ribbon */
+            /* KPI Summary Ribbon */
             #kpi-ribbon {
                 height: 38px;
                 background: #ffffff;
@@ -107,7 +106,7 @@
                 font-weight: 700;
             }
 
-            /* 3. Main Dashboard 4-Column Layout */
+            /* Main Dashboard Stage */
             #dashboard-body {
                 flex: 1;
                 display: flex;
@@ -115,7 +114,7 @@
                 position: relative;
             }
 
-            /* Left Sidebar: Layer Switcher & Filters */
+            /* Left Sidebar: Filters & Layers */
             #panel-filters {
                 width: 220px;
                 background: #ffffff;
@@ -156,7 +155,7 @@
                 accent-color: var(--brand-blue);
             }
 
-            /* Legend Symbology Markers */
+            /* Symbology Indicators */
             .symbol {
                 width: 12px;
                 height: 12px;
@@ -171,7 +170,7 @@
             .sym-rw { background: #000; height: 3px; border-top: 1px dashed #fff; border-bottom: 1px dashed #fff; }
             .sym-wtr { background: #29b6f6; border: 1px solid #0288d1; }
 
-            /* Middle Explorer List Panel */
+            /* Middle Explorer Panel */
             #panel-list {
                 width: 240px;
                 background: #ffffff;
@@ -227,7 +226,7 @@
                 margin-top: 2px;
             }
 
-            /* Map Stage (Center) */
+            /* Center Map Canvas */
             #panel-map {
                 flex: 1;
                 position: relative;
@@ -239,7 +238,7 @@
                 height: 100%;
             }
 
-            /* North Arrow Widget */
+            /* North Arrow */
             #north-arrow {
                 position: absolute;
                 top: 12px;
@@ -258,7 +257,7 @@
                 display: block;
             }
 
-            /* Right Details Panel */
+            /* Right Inspector Panel */
             #panel-details {
                 width: 280px;
                 background: #ffffff;
@@ -302,7 +301,7 @@
                 color: var(--text-dark);
             }
 
-            /* Status & Cartographic Bar */
+            /* Status Bar */
             #status-bar {
                 height: 24px;
                 background: #ffffff;
@@ -344,7 +343,7 @@
     </head>
     <body>
         <div id="app">
-            <!-- 1. Top Header -->
+            <!-- Header -->
             <header id="header">
                 <div class="app-title">
                     <i class="fas fa-map-marked-alt"></i>
@@ -353,7 +352,7 @@
                 <div class="app-meta">State: Karnataka | Administrative & Infrastructure Portal</div>
             </header>
 
-            <!-- 2. KPI / Metrics Summary Ribbon -->
+            <!-- Metrics Summary -->
             <section id="kpi-ribbon">
                 <div class="kpi-stat">District Area: <span class="val">5,234 km²</span></div>
                 <div class="kpi-stat">Administrative Taluks: <span class="val">6 Units</span></div>
@@ -361,9 +360,9 @@
                 <div class="kpi-stat">Datum / CRS: <span class="val">EPSG:4326 (WGS84)</span></div>
             </section>
 
-            <!-- 3. Main Dashboard Workspace -->
+            <!-- Main Layout -->
             <main id="dashboard-body">
-                <!-- Col 1: Filters & Layers -->
+                <!-- Col 1: Base Imagery & Layer Toggles -->
                 <aside id="panel-filters">
                     <div class="sidebar-section-title">Base Imagery</div>
                     <div class="filter-group">
@@ -416,14 +415,14 @@
                     </div>
                 </aside>
 
-                <!-- Col 2: Feature / Asset Explorer -->
+                <!-- Col 2: Taluks / Hubs Explorer -->
                 <aside id="panel-list">
                     <div class="big-metric-box">
                         <div class="number">6</div>
                         <div class="subtext">Taluks & Key Hubs</div>
                     </div>
                     <ul class="feature-list" id="explorer-list">
-                        <li class="feature-list-item" onclick="zoomToSpot(77.1378, 16.7644, 'Yadgir Urban Hub', 'Headquarters', 'District Centre & Railway Junction')">
+                        <li class="feature-list-item" onclick="zoomToSpot(77.1378, 16.7644, 'Yadgir Central', 'Headquarters', 'District Centre & Railway Junction')">
                             <h4>Yadgir Central</h4>
                             <p>Administrative HQ - Urban Center</p>
                         </li>
@@ -450,7 +449,7 @@
                     </ul>
                 </aside>
 
-                <!-- Col 3: Cartographic Map Canvas -->
+                <!-- Col 3: Map Stage -->
                 <section id="panel-map">
                     <div id="map">
                         <div id="popup" class="ol-popup">
@@ -459,7 +458,7 @@
                         </div>
                     </div>
 
-                    <!-- Clean GIS North Arrow -->
+                    <!-- Clean North Arrow -->
                     <div id="north-arrow" title="True North">
                         <svg viewBox="0 0 100 130">
                             <polygon points="50,5 20,70 50,55" fill="#01579b" />
@@ -470,7 +469,7 @@
                     </div>
                 </section>
 
-                <!-- Col 4: Selected Feature Inspector Card -->
+                <!-- Col 4: Right Feature Inspector Panel -->
                 <aside id="panel-details">
                     <div class="details-badge-row">
                         <span class="status-badge badge-active" id="insp-status">Active Layer</span>
@@ -485,8 +484,8 @@
                     </div>
 
                     <div class="detail-field">
-                        <label>District Division</label>
-                        <span id="insp-sub">Kalaburagi Division</span>
+                        <label>District</label>
+                        <span id="insp-sub">Yadgir District</span>
                     </div>
 
                     <div class="detail-field">
@@ -502,13 +501,13 @@
                     <div class="detail-field">
                         <label>Description & Notes</label>
                         <p id="insp-desc" style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4; margin-top: 3px;">
-                            Click any item in the left Explorer list or click vector geometry on the map to inspect feature attributes.
+                            Yadgir district is located in northern Karnataka. Click any Taluk in the explorer list or any feature on the map to inspect spatial attributes.
                         </p>
                     </div>
                 </aside>
             </main>
 
-            <!-- 4. Bottom Metric Status Bar -->
+            <!-- Scale & Coordinates Footer -->
             <footer id="status-bar">
                 <div id="scale-container"></div>
                 <div>
@@ -518,7 +517,7 @@
             </footer>
         </div>
 
-        <!-- GIS JavaScript Scripts -->
+        <!-- Scripts -->
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
         <script src="./resources/ol.js"></script>
@@ -552,7 +551,7 @@
             (function initGISDashboard() {
                 if (typeof map === 'undefined') return;
 
-                // 1. Metric Scale Line Control
+                // 1. Metric Scalebar
                 var scaleLine = new ol.control.ScaleLine({
                     units: 'metric',
                     target: document.getElementById('scale-container'),
@@ -561,7 +560,7 @@
                 });
                 map.addControl(scaleLine);
 
-                // 2. Continuous Lat/Lon Coordinate Tracker
+                // 2. Cursor Lat/Lon Tracker
                 map.on('pointermove', function(evt) {
                     var coords = ol.proj.toLonLat(evt.coordinate);
                     var lon = coords[0];
@@ -571,48 +570,41 @@
                     document.getElementById('coord-display').textContent = latStr + ', ' + lonStr;
                 });
 
-                // 3. Basemaps Configuration
-                var osmBase = new ol.layer.Tile({
-                    source: new ol.source.OSM(),
-                    visible: true,
-                    zIndex: 0
-                });
-
-                var gRoads = new ol.layer.Tile({
-                    source: new ol.source.XYZ({
-                        url: 'https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}',
-                        crossOrigin: 'anonymous'
+                // 3. Basemap Sources (Fix: Ek hi active tile layer mein direct source swap)
+                var basemapSources = {
+                    'osm': new ol.source.OSM(),
+                    'groads': new ol.source.XYZ({
+                        url: 'https://mt1.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}',
+                        crossOrigin: 'anonymous',
+                        maxZoom: 20
                     }),
-                    visible: false,
+                    'gsatellite': new ol.source.XYZ({
+                        url: 'https://mt1.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}', // Hybrid Satellite with labels
+                        crossOrigin: 'anonymous',
+                        maxZoom: 20
+                    })
+                };
+
+                // Single basemap layer sabse bottom (index 0) par
+                var activeBasemapLayer = new ol.layer.Tile({
+                    source: basemapSources['osm'],
                     zIndex: 0
                 });
+                map.getLayers().insertAt(0, activeBasemapLayer);
 
-                var gSatellite = new ol.layer.Tile({
-                    source: new ol.source.XYZ({
-                        url: 'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
-                        crossOrigin: 'anonymous'
-                    }),
-                    visible: false,
-                    zIndex: 0
-                });
-
-                // Insert into base
-                map.getLayers().insertAt(0, gSatellite);
-                map.getLayers().insertAt(0, gRoads);
-                map.getLayers().insertAt(0, osmBase);
-
-                // Basemap toggle radio triggers
+                // Basemap switch listener
                 var radios = document.querySelectorAll('input[name="basemap"]');
                 radios.forEach(function(radio) {
                     radio.addEventListener('change', function() {
-                        osmBase.setVisible(this.value === 'osm');
-                        gRoads.setVisible(this.value === 'groads');
-                        gSatellite.setVisible(this.value === 'gsatellite');
-                        map.renderSync();
+                        if (this.checked && basemapSources[this.value]) {
+                            activeBasemapLayer.setSource(basemapSources[this.value]);
+                            activeBasemapLayer.setVisible(true);
+                            map.renderSync();
+                        }
                     });
                 });
 
-                // 4. Hook Thematic Vector Layers
+                // 4. Thematic Layers Toggle
                 function setupToggle(id, layer) {
                     var el = document.getElementById(id);
                     if (el && layer) {
@@ -637,16 +629,17 @@
                     });
                 }
 
-                // 5. Map Click to Detail Inspector
+                // 5. Map Click to Feature Inspector
                 map.on('singleclick', function(evt) {
                     var feature = map.forEachFeatureAtPixel(evt.pixel, function(f) { return f; });
                     if (feature) {
                         var props = feature.getProperties();
                         var name = props.name || props.NAME || props.Name || props.taluk || 'Selected Feature';
-                        var type = props.type || props.TYPE || props.fclass || 'Vector Geometry';
+                        var type = props.type || props.TYPE || props.fclass || 'Vector Layer Feature';
                         
                         document.getElementById('insp-title').textContent = name;
                         document.getElementById('insp-type').textContent = type;
+                        document.getElementById('insp-sub').textContent = 'Yadgir District';
                         
                         var lonLat = ol.proj.toLonLat(evt.coordinate);
                         document.getElementById('insp-coords').textContent = 
@@ -654,11 +647,10 @@
                     }
                 });
 
-                // Force layout recalculation after mounting
                 setTimeout(function() { map.updateSize(); }, 200);
             })();
 
-            // Interactive list navigation helper
+            // Explorer list navigation
             function zoomToSpot(lon, lat, name, type, desc) {
                 if (typeof map === 'undefined') return;
                 var view = map.getView();
@@ -667,6 +659,7 @@
 
                 document.getElementById('insp-title').textContent = name;
                 document.getElementById('insp-type').textContent = type;
+                document.getElementById('insp-sub').textContent = 'Yadgir District';
                 document.getElementById('insp-desc').textContent = desc;
                 document.getElementById('insp-coords').textContent = lat.toFixed(4) + '° N, ' + lon.toFixed(4) + '° E';
             }
