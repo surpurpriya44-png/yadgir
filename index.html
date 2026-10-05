@@ -41,7 +41,7 @@
                 color: var(--text-dark);
             }
 
-            /* QGIS default switcher ko hide karein */
+            /* Hide conflicting default QGIS2Web widgets */
             .ol-layerswitcher, .layer-switcher, .layer-switcher.shown {
                 display: none !important;
             }
@@ -53,7 +53,7 @@
                 width: 100vw;
             }
 
-            /* 1. Header Bar */
+            /* Header Bar */
             #header {
                 height: 42px;
                 background: linear-gradient(90deg, var(--brand-dark), var(--brand-blue));
@@ -82,7 +82,7 @@
                 border-radius: 4px;
             }
 
-            /* 2. KPI Summary Ribbon */
+            /* KPI Ribbon */
             #kpi-ribbon {
                 height: 38px;
                 background: #ffffff;
@@ -106,7 +106,7 @@
                 font-weight: 700;
             }
 
-            /* 3. Main Dashboard Workspace */
+            /* Main Dashboard Stage */
             #dashboard-body {
                 flex: 1;
                 display: flex;
@@ -114,7 +114,7 @@
                 position: relative;
             }
 
-            /* Col 1: Filters & Layers */
+            /* Left Sidebar: Layers & Imagery */
             #panel-filters {
                 width: 220px;
                 background: #ffffff;
@@ -155,7 +155,7 @@
                 accent-color: var(--brand-blue);
             }
 
-            /* Symbology Icons */
+            /* Symbology Indicators */
             .symbol {
                 width: 12px;
                 height: 12px;
@@ -170,7 +170,7 @@
             .sym-rw { background: #000; height: 3px; border-top: 1px dashed #fff; border-bottom: 1px dashed #fff; }
             .sym-wtr { background: #29b6f6; border: 1px solid #0288d1; }
 
-            /* Col 2: Explorer Panel */
+            /* Middle Explorer Panel */
             #panel-list {
                 width: 240px;
                 background: #ffffff;
@@ -226,7 +226,7 @@
                 margin-top: 2px;
             }
 
-            /* Col 3: Center Map Stage */
+            /* Center Map Canvas */
             #panel-map {
                 flex: 1;
                 position: relative;
@@ -238,7 +238,7 @@
                 height: 100%;
             }
 
-            /* North Arrow Control */
+            /* Clean Cartographic North Arrow */
             #north-arrow {
                 position: absolute;
                 top: 12px;
@@ -257,7 +257,7 @@
                 display: block;
             }
 
-            /* Col 4: Right Feature Inspector */
+            /* Right Inspector Panel */
             #panel-details {
                 width: 280px;
                 background: #ffffff;
@@ -301,7 +301,7 @@
                 color: var(--text-dark);
             }
 
-            /* 4. Bottom Metric Status Bar */
+            /* Bottom Metric Status Bar */
             #status-bar {
                 height: 24px;
                 background: #ffffff;
@@ -352,7 +352,7 @@
                 <div class="app-meta">State: Karnataka | Administrative & Infrastructure Portal</div>
             </header>
 
-            <!-- Metrics Summary Ribbon -->
+            <!-- KPI Summary Ribbon -->
             <section id="kpi-ribbon">
                 <div class="kpi-stat">District Area: <span class="val">5,234 km²</span></div>
                 <div class="kpi-stat">Administrative Taluks: <span class="val">6 Units</span></div>
@@ -360,9 +360,9 @@
                 <div class="kpi-stat">Datum / CRS: <span class="val">EPSG:4326 (WGS84)</span></div>
             </section>
 
-            <!-- Workspace -->
+            <!-- Main Layout -->
             <main id="dashboard-body">
-                <!-- Left: Base Imagery & Vector Layers -->
+                <!-- Col 1: Base Imagery & Vector Layers -->
                 <aside id="panel-filters">
                     <div class="sidebar-section-title">Base Imagery</div>
                     <div class="filter-group">
@@ -415,41 +415,41 @@
                     </div>
                 </aside>
 
-                <!-- Middle: Explorer List -->
+                <!-- Col 2: Official Taluks Explorer (Direct from your shapefile table) -->
                 <aside id="panel-list">
                     <div class="big-metric-box">
                         <div class="number">6</div>
-                        <div class="subtext">Taluks & Key Hubs</div>
+                        <div class="subtext">Taluks & Administrative Units</div>
                     </div>
                     <ul class="feature-list" id="explorer-list">
-                        <li class="feature-list-item" onclick="zoomToSpot(77.1378, 16.7644, 'Yadgir Central', 'Headquarters', 'District Centre & Railway Junction')">
-                            <h4>Yadgir Central</h4>
-                            <p>Administrative HQ - Urban Center</p>
+                        <li class="feature-list-item" onclick="zoomToSpot(77.1378, 16.7644, 'Yadgir', '05589', 'Taluk HQ & District Administrative Centre')">
+                            <h4>Yadgir</h4>
+                            <p>LGD Code: 05589 | District Centre</p>
                         </li>
-                        <li class="feature-list-item" onclick="zoomToSpot(76.7611, 16.5186, 'Shorapur (Surpur)', 'Sub-Division', 'Heritage & Agricultural Zone')">
+                        <li class="feature-list-item" onclick="zoomToSpot(76.7611, 16.5186, 'Shorapur', '05587', 'Sub-Division & Historical Agricultural Zone')">
                             <h4>Shorapur</h4>
-                            <p>Taluk HQ - South-West Sector</p>
+                            <p>LGD Code: 05587 | South-West Sector</p>
                         </li>
-                        <li class="feature-list-item" onclick="zoomToSpot(76.9536, 16.6347, 'Shahapur Taluk', 'Sub-Division', 'Krishna Basin Irrigated Zone')">
+                        <li class="feature-list-item" onclick="zoomToSpot(76.9536, 16.6347, 'Shahapur', '05588', 'Upper Krishna Basin Agricultural Zone')">
                             <h4>Shahapur</h4>
-                            <p>Taluk HQ - Major Agricultural Hub</p>
+                            <p>LGD Code: 05588 | Major Command Area</p>
                         </li>
-                        <li class="feature-list-item" onclick="zoomToSpot(77.2917, 16.5500, 'Gurmatkal', 'Town Municipality', 'Border Sector')">
-                            <h4>Gurmatkal</h4>
-                            <p>Taluk HQ - Eastern Sector</p>
+                        <li class="feature-list-item" onclick="zoomToSpot(77.2917, 16.5500, 'Gurumithakala', '06784', 'Eastern Border Municipality & Taluk')">
+                            <h4>Gurumithakala</h4>
+                            <p>LGD Code: 06784 | Eastern Sector</p>
                         </li>
-                        <li class="feature-list-item" onclick="zoomToSpot(76.8400, 16.4000, 'Hunsagi', 'Irrigation Command', 'Upper Krishna Basin')">
-                            <h4>Hunsagi</h4>
-                            <p>Taluk HQ - Southern Water Corridor</p>
+                        <li class="feature-list-item" onclick="zoomToSpot(76.8400, 16.4000, 'Hunisigi', '06781', 'Irrigation Command & Taluk Centre')">
+                            <h4>Hunisigi</h4>
+                            <p>LGD Code: 06781 | Southern Sector</p>
                         </li>
-                        <li class="feature-list-item" onclick="zoomToSpot(76.6000, 16.4800, 'Kakkera', 'Municipality', 'Sub-Urban Zone')">
-                            <h4>Kakkera</h4>
-                            <p>Urban Local Body - Shorapur Cluster</p>
+                        <li class="feature-list-item" onclick="zoomToSpot(77.0125, 16.6912, 'Vadagera', '06783', 'Administrative Taluk & Command Hub')">
+                            <h4>Vadagera</h4>
+                            <p>LGD Code: 06783 | Central-South Sector</p>
                         </li>
                     </ul>
                 </aside>
 
-                <!-- Center: Map Stage -->
+                <!-- Col 3: Map Stage -->
                 <section id="panel-map">
                     <div id="map">
                         <div id="popup" class="ol-popup">
@@ -469,7 +469,7 @@
                     </div>
                 </section>
 
-                <!-- Right: Details Inspector -->
+                <!-- Col 4: Right Feature Inspector Panel -->
                 <aside id="panel-details">
                     <div class="details-badge-row">
                         <span class="status-badge badge-active" id="insp-status">Active Layer</span>
@@ -489,8 +489,8 @@
                     </div>
 
                     <div class="detail-field">
-                        <label>River Basins</label>
-                        <span id="insp-basin">Krishna & Bhima River Catchments</span>
+                        <label>SUBDIS LGD Code</label>
+                        <span id="insp-lgd">580 (Dist LGD)</span>
                     </div>
 
                     <div class="detail-field">
@@ -501,13 +501,13 @@
                     <div class="detail-field">
                         <label>Description & Notes</label>
                         <p id="insp-desc" style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4; margin-top: 3px;">
-                            Yadgir district is located in northern Karnataka. Click any Taluk in the explorer list or any feature on the map to inspect spatial attributes.
+                            Yadgir district, Karnataka comprises 6 administrative taluks: Vadagera, Shahapur, Gurumithakala, Shorapur, Hunisigi, and Yadgir. Click any taluk in the explorer list to zoom directly.
                         </p>
                     </div>
                 </aside>
             </main>
 
-            <!-- Bottom Status Bar -->
+            <!-- Scale & Coordinates Footer -->
             <footer id="status-bar">
                 <div id="scale-container"></div>
                 <div>
@@ -517,7 +517,7 @@
             </footer>
         </div>
 
-        <!-- JS Scripts -->
+        <!-- GIS JavaScript Sources -->
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
         <script src="./resources/ol.js"></script>
@@ -547,12 +547,11 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
-        <!-- Custom Fix Script -->
         <script>
-            (function initDashboardFix() {
+            (function initGISDashboard() {
                 if (typeof map === 'undefined') return;
 
-                // 1. Metric Scalebar Control
+                // 1. Metric Scale Line Control
                 var scaleLine = new ol.control.ScaleLine({
                     units: 'metric',
                     target: document.getElementById('scale-container'),
@@ -561,7 +560,7 @@
                 });
                 map.addControl(scaleLine);
 
-                // 2. Continuous Lat/Lon Coordinate Tracker
+                // 2. Cursor Lat/Lon Tracker
                 map.on('pointermove', function(evt) {
                     var coords = ol.proj.toLonLat(evt.coordinate);
                     var lon = coords[0];
@@ -571,15 +570,15 @@
                     document.getElementById('coord-display').textContent = latStr + ', ' + lonStr;
                 });
 
-                // 3. BASEMAP FIX: layers.js se pehle se add hui tile layers ko completely remove karein
-                var existingLayers = map.getLayers().getArray().slice();
-                existingLayers.forEach(function(lyr) {
-                    if (!(lyr instanceof ol.layer.Vector)) {
-                        map.removeLayer(lyr);
+                // 3. BASEMAP FIX: Remove all preexisting background tile layers from layers.js
+                var layersSnapshot = map.getLayers().getArray().slice();
+                layersSnapshot.forEach(function(l) {
+                    if (!(l instanceof ol.layer.Vector)) {
+                        map.removeLayer(l);
                     }
                 });
 
-                // Clean sources define karein
+                // Create fresh sources
                 var basemapSources = {
                     'osm': new ol.source.OSM(),
                     'groads': new ol.source.XYZ({
@@ -594,14 +593,14 @@
                     })
                 };
 
-                // Single dynamic basemap layer sabse neeche add karein
+                // Single baseline tile layer
                 var activeBasemapLayer = new ol.layer.Tile({
                     source: basemapSources['osm'],
                     zIndex: 0
                 });
                 map.getLayers().insertAt(0, activeBasemapLayer);
 
-                // Basemap radio button change listener
+                // Radio buttons trigger source replacement cleanly
                 var radios = document.querySelectorAll('input[name="basemap"]');
                 radios.forEach(function(radio) {
                     radio.addEventListener('change', function() {
@@ -643,13 +642,15 @@
                     var feature = map.forEachFeatureAtPixel(evt.pixel, function(f) { return f; });
                     if (feature) {
                         var props = feature.getProperties();
-                        var name = props.name || props.NAME || props.Name || props.taluk || 'Selected Feature';
-                        var type = props.type || props.TYPE || props.fclass || 'Vector Layer Feature';
-                        
+                        var name = props.SUB_DIST || props.name || props.NAME || props.Name || 'Selected Feature';
+                        var lgd = props.SUBDIS_LGD || props.DIST_LGD || '--';
+                        var type = props.SUBDIS_TYP || props.type || props.TYPE || 'Administrative Unit';
+
                         document.getElementById('insp-title').textContent = name;
                         document.getElementById('insp-type').textContent = type;
                         document.getElementById('insp-sub').textContent = 'Yadgir District';
-                        
+                        document.getElementById('insp-lgd').textContent = lgd;
+
                         var lonLat = ol.proj.toLonLat(evt.coordinate);
                         document.getElementById('insp-coords').textContent = 
                             lonLat[1].toFixed(4) + '° N, ' + lonLat[0].toFixed(4) + '° E';
@@ -659,16 +660,17 @@
                 setTimeout(function() { map.updateSize(); }, 200);
             })();
 
-            // Interactive list zoom helper
-            function zoomToSpot(lon, lat, name, type, desc) {
+            // Interactive Taluk Zoom Helper
+            function zoomToSpot(lon, lat, name, lgd, desc) {
                 if (typeof map === 'undefined') return;
                 var view = map.getView();
                 var center = ol.proj.fromLonLat([lon, lat]);
                 view.animate({ center: center, zoom: 12, duration: 800 });
 
                 document.getElementById('insp-title').textContent = name;
-                document.getElementById('insp-type').textContent = type;
+                document.getElementById('insp-type').textContent = 'Taluk (Sub-District)';
                 document.getElementById('insp-sub').textContent = 'Yadgir District';
+                document.getElementById('insp-lgd').textContent = lgd;
                 document.getElementById('insp-desc').textContent = desc;
                 document.getElementById('insp-coords').textContent = lat.toFixed(4) + '° N, ' + lon.toFixed(4) + '° E';
             }
