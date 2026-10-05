@@ -41,7 +41,7 @@
                 color: var(--text-dark);
             }
 
-            /* Hide conflicting default QGIS2Web widgets */
+            /* Conflicting QGIS widgets hide karein */
             .ol-layerswitcher, .layer-switcher, .layer-switcher.shown {
                 display: none !important;
             }
@@ -238,7 +238,7 @@
                 height: 100%;
             }
 
-            /* Clean Cartographic North Arrow */
+            /* Cartographic North Arrow */
             #north-arrow {
                 position: absolute;
                 top: 12px;
@@ -415,7 +415,7 @@
                     </div>
                 </aside>
 
-                <!-- Col 2: Official Taluks Explorer (Direct from your shapefile table) -->
+                <!-- Col 2: Official Taluks Explorer -->
                 <aside id="panel-list">
                     <div class="big-metric-box">
                         <div class="number">6</div>
@@ -548,7 +548,7 @@
         <script src="./resources/qgis2web.js"></script>
 
         <script>
-            (function initGISDashboard() {
+            (function initDashboardFix() {
                 if (typeof map === 'undefined') return;
 
                 // 1. Metric Scale Line Control
@@ -570,7 +570,7 @@
                     document.getElementById('coord-display').textContent = latStr + ', ' + lonStr;
                 });
 
-                // 3. BASEMAP FIX: Remove all preexisting background tile layers from layers.js
+                // 3. BASEMAP FIX: Pre-existing tile layers ko remove karein
                 var layersSnapshot = map.getLayers().getArray().slice();
                 layersSnapshot.forEach(function(l) {
                     if (!(l instanceof ol.layer.Vector)) {
@@ -578,7 +578,7 @@
                     }
                 });
 
-                // Create fresh sources
+                // Yaha gsatellite me lyrs=s use kiya gaya hai (bina labels/names wala pure satellite image)
                 var basemapSources = {
                     'osm': new ol.source.OSM(),
                     'groads': new ol.source.XYZ({
@@ -587,7 +587,7 @@
                         maxZoom: 20
                     }),
                     'gsatellite': new ol.source.XYZ({
-                        url: 'https://mt1.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}',
+                        url: 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
                         crossOrigin: 'anonymous',
                         maxZoom: 20
                     })
@@ -600,7 +600,7 @@
                 });
                 map.getLayers().insertAt(0, activeBasemapLayer);
 
-                // Radio buttons trigger source replacement cleanly
+                // Radio buttons handler
                 var radios = document.querySelectorAll('input[name="basemap"]');
                 radios.forEach(function(radio) {
                     radio.addEventListener('change', function() {
@@ -612,7 +612,7 @@
                     });
                 });
 
-                // 4. Hook Thematic Vector Layers
+                // 4. Vector Layers Toggles
                 function setupToggle(id, layer) {
                     var el = document.getElementById(id);
                     if (el && layer) {
